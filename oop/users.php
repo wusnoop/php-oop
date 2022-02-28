@@ -4,6 +4,10 @@ class User{
     public $login;
     public $password;
 
+    function __construct($name, $login, $password){
+        $this->name = $name;
+        $this->login = $login;
+        $this->password = $password; }
    function showinfo(){
 
        echo "<p>Name :{$this->name}";
@@ -15,21 +19,11 @@ class User{
        echo "<hr>";
     }
 };
-$user1 = new User();
-$user2 = new User();
-$user3 = new User();
+$user1 = new User("Konstantin","wusnoop", "qwerty" );
+$user2 = new User("Misha","Anduin","asdfgh"  );
+$user3 = new User("Sylvana", "Death", "For the Horde");
 
-$user1->name = "Konstantin";
-$user1->login = "wusnoop";
-$user1->password = "qwerty";
 
-$user2->name = "Misha";
-$user2->login = "Anduin";
-$user2->password = "asdfgh";
-
-$user3->name = "Sylvana";
-$user3->login = "Death";
-$user3->password = "For the Horde";
 
 $user1->showinfo();
 $user2->showinfo();
