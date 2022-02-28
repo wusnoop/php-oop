@@ -7,7 +7,11 @@ class User{
     function __construct($name, $login, $password){
         $this->name = $name;
         $this->login = $login;
-        $this->password = $password; }
+        $this->password = $password;
+    }
+    function __destruct(){
+        echo  "<p>Пользователь {$this->login}  удалён";
+    }
    function showinfo(){
 
        echo "<p>Name :{$this->name}";
