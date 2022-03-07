@@ -12,7 +12,9 @@ class NewsDB implements INewsDB{
     function __construct(){
             $this->_db = new SQLite3(self::DB_NAME);
             if(filesize(self::DB_NAME) == 0){
-                $sql = "CREATE TABLE msgs(
+               try {
+
+                   $sql = "CREATE TABLE msgs(
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     title TEXT,
                     category INTEGER,
@@ -20,17 +22,24 @@ class NewsDB implements INewsDB{
                     source TEXT,
                     datetime INTEGER
                  )";
-                $this->_db-> exec($sql) or die($this->_db->lastErrorMsg());
-                $sql = "CREATE TABLE category(
+                   if(!$this->_db->exec($sql))
+                       throw new Exception($this->_db->lastErrorMsg());
+                   $sql = "CREATE TABLE category(
                         id INTEGER,
                         name TEXT
                      )";
-                $this->_db-> exec($sql) or die($this->_db->lastErrorMsg());
-                $sql = "INSERT INTO category(id, name)
+                   if(!$this->_db->exec($sql))
+                       throw new Exception($this->_db->lastErrorMsg());
+                   $sql = "INSERT INTO category(id, name)
                         SELECT 1 as id, 'Политика' as name
                         UNION SELECT 2 as id, 'Культура' as name
                         UNION SELECT 3 as id, 'Спорт' as name ";
-                $this->_db-> exec($sql) or die($this->_db->lastErrorMsg());
+                   if(!$this->_db->exec($sql))
+                       throw new Exception($this->_db->lastErrorMsg());
+               }
+               catch (Exception $e){
+                    echo "Error";
+               }
 
             }
     }
@@ -54,7 +63,25 @@ class NewsDB implements INewsDB{
         return $this->_db->exec($sql);
 
     }
-    function getNews(){}
+   private function db2arr($data){
+        $arr =[];
+        while ($row = $data->fetcharray(SQLITE3_ASSOC)){
+            $arr[] = $row;
+        }
+        return $arr;
+    }
+    function getNews(){
+        $sql = "SELECT msgs.id as id, title,
+                    category.name as category, 
+                    description, source, datetime 
+                  FROM msgs, category 
+                  WHERE category.id = msgs.category 
+                  ORDER BY msgs.id DESC";
+        $res = $this->_db->query($sql);
+        if(!$res){
+            return false;
+        } else return $this->db2arr($res);
+    }
     function deleteNews($id){}
     function clearStr($data){
         $data = strip_tags($data);
