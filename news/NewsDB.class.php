@@ -82,7 +82,10 @@ class NewsDB implements INewsDB{
             return false;
         } else return $this->db2arr($res);
     }
-    function deleteNews($id){}
+    function deleteNews($id){
+        $sql = "DELETE FROM msgs WHERE id = $id";
+        return $this->_db->query($sql);
+    }
     function clearStr($data){
         $data = strip_tags($data);
         return $this->_db->escapeString($data);

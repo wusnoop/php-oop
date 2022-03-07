@@ -4,6 +4,7 @@
     $errMsg = "";
     if($_SERVER['REQUEST_METHOD']== 'POST')
         require "save_news.inc.php";
+    require "delete_news.inc.php";
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,8 +37,8 @@
 </form>
 <?php
  require "get_news.inc.php";
- $posts = $news->getNews();
- print_r($posts);
+
+
 ?>
 </body>
 </html>
